@@ -10,10 +10,11 @@ using namespace fractals;
 using vf = __m256;
 using vi = __m256i;
 
-template <typename Kernel>
+template <typename Init, typename Kernel>
 static ABI_AVX2 utils::Buffer<int32_t> loop(const utils::Viewport& viewport,
                                             float resolution,
                                             int32_t iterations,
+                                            Init init,
                                             Kernel kernel)
 {
     const vf epsilon = _mm256_set1_ps(4.0f);
@@ -27,9 +28,9 @@ static ABI_AVX2 utils::Buffer<int32_t> loop(const utils::Viewport& viewport,
     utils::vcomplex<vf> prev;
     for (std::size_t y = 0; y < result_buffer.height(); ++y)
     {
-        input.imag = _mm256_set1_ps(viewport.top() - y * resolution);
-
         auto* result_ptr = result_buffer.line<vi>(y);
+
+        input.imag = _mm256_set1_ps(viewport.top() - y * resolution);
         for (std::size_t x = 0; x < result_buffer.width(); x += sizeof(vi) / sizeof(int32_t))
         {
             input.real = _mm256_set_ps(
@@ -43,11 +44,10 @@ static ABI_AVX2 utils::Buffer<int32_t> loop(const utils::Viewport& viewport,
                 viewport.left() + (x + 0) * resolution
             );
 
-            prev.real = _mm256_set1_ps(0.0f);
-            prev.imag = _mm256_set1_ps(0.0f);
-
             auto result = _mm256_set1_epi32(iterations);
             auto result_mask = _mm256_set1_epi32(0);
+
+            prev = init(input);
             for (int32_t iteration = 0; iteration < iterations; ++iteration)
             {
                 prev = kernel(prev, input);
@@ -69,6 +69,13 @@ static ABI_AVX2 utils::Buffer<int32_t> loop(const utils::Viewport& viewport,
 utils::Buffer<int32_t> fractals::mandelbrot(const utils::Viewport& viewport, float resolution, int32_t iterations)
 {
     return loop(viewport, resolution, iterations,
+        [](const utils::vcomplex<vf>& input) ABI_AVX2
+        {
+            return utils::vcomplex<vf>{
+                _mm256_set1_ps(0.0f),
+                _mm256_set1_ps(0.0f)
+            };
+        },
         [](const utils::vcomplex<vf>& prev, const utils::vcomplex<vf>& input) ABI_AVX2
         {
             return utils::vcomplex<vf>{
@@ -82,6 +89,13 @@ utils::Buffer<int32_t> fractals::mandelbrot(const utils::Viewport& viewport, flo
 utils::Buffer<int32_t> fractals::burning_ship(const utils::Viewport& viewport, float resolution, int32_t iterations)
 {
     return loop(viewport, resolution, iterations,
+        [](const utils::vcomplex<vf>& input) ABI_AVX2
+        {
+            return utils::vcomplex<vf>{
+                _mm256_set1_ps(0.0f),
+                _mm256_set1_ps(0.0f)
+            };
+        },
         [](const utils::vcomplex<vf>& prev, const utils::vcomplex<vf>& input) ABI_AVX2
         {
             utils::vcomplex<vf> prev_abs{
