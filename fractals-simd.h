@@ -66,6 +66,12 @@ private:
     Type *_memory;
 };
 
+template <typename T>
+struct vcomplex {
+    T real;
+    T imag;
+};
+
 }
 
 utils::Buffer<int32_t> mandelbrot(const utils::Viewport& viewport, float resolution, int32_t iterations);
