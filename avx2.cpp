@@ -110,3 +110,20 @@ utils::Buffer<int32_t> fractals::burning_ship(const utils::Viewport& viewport, f
         }
     );
 }
+
+utils::Buffer<int32_t> fractals::julia_set(const std::complex<float>& c, const utils::Viewport& viewport, float resolution, int32_t iterations)
+{
+    return loop(viewport, resolution, iterations,
+        [](const utils::vcomplex<vf>& input) ABI_AVX2
+        {
+            return input;
+        },
+        [c](const utils::vcomplex<vf>& prev, const utils::vcomplex<vf>&) ABI_AVX2
+        {
+            return utils::vcomplex<vf>{
+                _mm256_add_ps(_mm256_sub_ps(_mm256_mul_ps(prev.real, prev.real), _mm256_mul_ps(prev.imag, prev.imag)), _mm256_set1_ps(c.real())),
+                _mm256_add_ps(_mm256_mul_ps(_mm256_set1_ps(2), _mm256_mul_ps(prev.real, prev.imag)), _mm256_set1_ps(c.imag()))
+            };
+        }
+    );
+}

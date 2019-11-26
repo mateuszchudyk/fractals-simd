@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
+#include <complex>
 
 namespace fractals {
 
@@ -76,6 +77,7 @@ struct vcomplex {
 
 utils::Buffer<int32_t> mandelbrot(const utils::Viewport& viewport, float resolution, int32_t iterations);
 utils::Buffer<int32_t> burning_ship(const utils::Viewport& viewport, float resolution, int32_t iterations);
+utils::Buffer<int32_t> julia_set(const std::complex<float>& c, const utils::Viewport& viewport, float resolution, int32_t iterations);
 
 }
 
