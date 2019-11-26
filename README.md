@@ -15,7 +15,7 @@ Library containing following set of fractals implemented using SIMD:
 **Mandelbrot**
 ![](images/mandelbrot.png)
 
-**Buning ship**
+**Burning ship**
 ![](images/burning-ship.png)
 
 **Julia set, c = -0.1 + 0.65i**
