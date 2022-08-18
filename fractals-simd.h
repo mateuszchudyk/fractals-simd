@@ -5,6 +5,8 @@
 #include <cstdlib>
 #include <iostream>
 #include <complex>
+#include <fstream>
+#include <array>
 
 namespace fractals {
 
@@ -28,7 +30,7 @@ private:
     float _bottom;
 };
 
-template <typename Type = unsigned char>
+template <typename Type = uint8_t>
 class Buffer
 {
 public:
@@ -68,6 +70,69 @@ private:
 Buffer<int32_t> mandelbrot(const Viewport& viewport, float resolution, int32_t iterations);
 Buffer<int32_t> burning_ship(const Viewport& viewport, float resolution, int32_t iterations);
 Buffer<int32_t> julia_set(const std::complex<float>& c, const Viewport& viewport, float resolution, int32_t iterations);
+
+namespace utils {
+
+namespace colormap {
+
+using Colormap = int32_t(*)(unsigned char value);
+
+int32_t gray(unsigned char value);
+int32_t red(unsigned char value);
+int32_t green(unsigned char value);
+int32_t blue(unsigned char value);
+int32_t hot(unsigned char value);
+
+}
+
+template <typename Type>
+void save_buffer_as_bmp(const Buffer<Type>& buffer, const std::string& filename, const colormap::Colormap& colormap = colormap::hot)
+{
+    std::ofstream file(filename, std::ios::binary);
+
+    int filesize = (14 + 40) + 4 * buffer.width() * buffer.height();
+
+    uint8_t header[14] = {0};
+    header[0] = 'B';
+    header[1] = 'M';
+    *reinterpret_cast<int32_t*>(&header[2]) = filesize;
+    *reinterpret_cast<int32_t*>(&header[6]) = 0;
+    *reinterpret_cast<int32_t*>(&header[10]) = 54;
+
+    uint8_t info_header[40] = {0};
+    *reinterpret_cast<int32_t*>(&info_header[0]) = sizeof(info_header);
+    *reinterpret_cast<int32_t*>(&info_header[4]) = buffer.width();
+    *reinterpret_cast<int32_t*>(&info_header[8]) = buffer.height();
+    *reinterpret_cast<int16_t*>(&info_header[12]) = 1;
+    *reinterpret_cast<int16_t*>(&info_header[14]) = 32;
+
+    file.write(reinterpret_cast<char*>(header), sizeof(header));
+    file.write(reinterpret_cast<char*>(info_header), sizeof(info_header));
+
+    // Save data
+    Type max_value = 0;
+    for (int y = 0; y < buffer.height(); ++y)
+    {
+        for (int x = 0; x < buffer.width(); ++x)
+        {
+            max_value = std::max(max_value, *buffer.ptr(x, y));
+        }
+    }
+
+    auto zero = char(0);
+    for (int y = buffer.height() - 1; y >= 0; --y)
+    {
+        for (int x = 0; x < buffer.width(); ++x)
+        {
+            int32_t value = (max_value > 0 ? colormap(std::round(255.0f * *buffer.ptr(x, y) / max_value)) : 0);
+            file.write(reinterpret_cast<char*>(&value), 4);
+        }
+    }
+
+    file.close();
+}
+
+}
 
 }
 
