@@ -5,7 +5,7 @@ namespace fractals::utils::colormap {
 int32_t gray(unsigned char value)
 {
     int32_t v = value;
-    return 0xff000000 | v << 16 | v << 8 | v;
+    return v << 16 | v << 8 | v;
 }
 
 int32_t red(unsigned char value)
