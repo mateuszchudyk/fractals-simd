@@ -10,6 +10,12 @@ using namespace fractals;
 using vf = __m256;
 using vi = __m256i;
 
+struct vcomplex
+{
+    vf real;
+    vf imag;
+};
+
 template <typename Init, typename Kernel>
 static ABI_AVX2 utils::Buffer<int32_t> loop(const utils::Viewport& viewport,
                                             float resolution,
@@ -24,8 +30,8 @@ static ABI_AVX2 utils::Buffer<int32_t> loop(const utils::Viewport& viewport,
         std::round(viewport.height() / resolution + 1),
         sizeof(vi) / sizeof(int32_t));
 
-    utils::vcomplex<vf> input;
-    utils::vcomplex<vf> prev;
+    vcomplex input;
+    vcomplex prev;
     for (std::size_t y = 0; y < result_buffer.height(); ++y)
     {
         auto* result_ptr = result_buffer.line<vi>(y);
@@ -69,16 +75,16 @@ static ABI_AVX2 utils::Buffer<int32_t> loop(const utils::Viewport& viewport,
 utils::Buffer<int32_t> fractals::mandelbrot(const utils::Viewport& viewport, float resolution, int32_t iterations)
 {
     return loop(viewport, resolution, iterations,
-        [](const utils::vcomplex<vf>& input) ABI_AVX2
+        [](const vcomplex& input) ABI_AVX2
         {
-            return utils::vcomplex<vf>{
+            return vcomplex{
                 _mm256_set1_ps(0.0f),
                 _mm256_set1_ps(0.0f)
             };
         },
-        [](const utils::vcomplex<vf>& prev, const utils::vcomplex<vf>& input) ABI_AVX2
+        [](const vcomplex& prev, const vcomplex& input) ABI_AVX2
         {
-            return utils::vcomplex<vf>{
+            return vcomplex{
                 _mm256_add_ps(_mm256_sub_ps(_mm256_mul_ps(prev.real, prev.real), _mm256_mul_ps(prev.imag, prev.imag)), input.real),
                 _mm256_add_ps(_mm256_mul_ps(_mm256_set1_ps(2), _mm256_mul_ps(prev.real, prev.imag)), input.imag)
             };
@@ -89,21 +95,21 @@ utils::Buffer<int32_t> fractals::mandelbrot(const utils::Viewport& viewport, flo
 utils::Buffer<int32_t> fractals::burning_ship(const utils::Viewport& viewport, float resolution, int32_t iterations)
 {
     return loop(viewport, resolution, iterations,
-        [](const utils::vcomplex<vf>& input) ABI_AVX2
+        [](const vcomplex& input) ABI_AVX2
         {
-            return utils::vcomplex<vf>{
+            return vcomplex{
                 _mm256_set1_ps(0.0f),
                 _mm256_set1_ps(0.0f)
             };
         },
-        [](const utils::vcomplex<vf>& prev, const utils::vcomplex<vf>& input) ABI_AVX2
+        [](const vcomplex& prev, const vcomplex& input) ABI_AVX2
         {
-            utils::vcomplex<vf> prev_abs{
+            vcomplex prev_abs{
                 _mm256_and_ps(prev.real, _mm256_castsi256_ps(_mm256_set1_epi32(0x7fffffff))),
                 _mm256_and_ps(prev.imag, _mm256_castsi256_ps(_mm256_set1_epi32(0x7fffffff)))
             };
 
-            return utils::vcomplex<vf>{
+            return vcomplex{
                 _mm256_add_ps(_mm256_sub_ps(_mm256_mul_ps(prev_abs.real, prev_abs.real), _mm256_mul_ps(prev_abs.imag, prev_abs.imag)), input.real),
                 _mm256_add_ps(_mm256_mul_ps(_mm256_set1_ps(2), _mm256_mul_ps(prev_abs.real, prev_abs.imag)), input.imag)
             };
@@ -114,13 +120,13 @@ utils::Buffer<int32_t> fractals::burning_ship(const utils::Viewport& viewport, f
 utils::Buffer<int32_t> fractals::julia_set(const std::complex<float>& c, const utils::Viewport& viewport, float resolution, int32_t iterations)
 {
     return loop(viewport, resolution, iterations,
-        [](const utils::vcomplex<vf>& input) ABI_AVX2
+        [](const vcomplex& input) ABI_AVX2
         {
             return input;
         },
-        [c](const utils::vcomplex<vf>& prev, const utils::vcomplex<vf>&) ABI_AVX2
+        [c](const vcomplex& prev, const vcomplex&) ABI_AVX2
         {
-            return utils::vcomplex<vf>{
+            return vcomplex{
                 _mm256_add_ps(_mm256_sub_ps(_mm256_mul_ps(prev.real, prev.real), _mm256_mul_ps(prev.imag, prev.imag)), _mm256_set1_ps(c.real())),
                 _mm256_add_ps(_mm256_mul_ps(_mm256_set1_ps(2), _mm256_mul_ps(prev.real, prev.imag)), _mm256_set1_ps(c.imag()))
             };

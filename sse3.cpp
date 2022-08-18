@@ -10,6 +10,12 @@ using namespace fractals;
 using vf = __m128;
 using vi = __m128i;
 
+struct vcomplex
+{
+    vf real;
+    vf imag;
+};
+
 template <typename Init, typename Kernel>
 static ABI_SSE3 utils::Buffer<int32_t> loop(const utils::Viewport& viewport,
                                             float resolution,
@@ -24,8 +30,8 @@ static ABI_SSE3 utils::Buffer<int32_t> loop(const utils::Viewport& viewport,
         std::round(viewport.height() / resolution + 1),
         sizeof(vi) / sizeof(int32_t));
 
-    utils::vcomplex<vf> input;
-    utils::vcomplex<vf> prev;
+    vcomplex input;
+    vcomplex prev;
     for (std::size_t y = 0; y < result_buffer.height(); ++y)
     {
         auto* result_ptr = result_buffer.line<vi>(y);
@@ -65,16 +71,16 @@ static ABI_SSE3 utils::Buffer<int32_t> loop(const utils::Viewport& viewport,
 utils::Buffer<int32_t> fractals::mandelbrot(const utils::Viewport& viewport, float resolution, int32_t iterations)
 {
     return loop(viewport, resolution, iterations,
-        [](const utils::vcomplex<vf>& input) ABI_SSE3
+        [](const vcomplex& input) ABI_SSE3
         {
-            return utils::vcomplex<vf>{
+            return vcomplex{
                 _mm_set1_ps(0.0f),
                 _mm_set1_ps(0.0f)
             };
         },
-        [](const utils::vcomplex<vf>& prev, const utils::vcomplex<vf>& input) ABI_SSE3
+        [](const vcomplex& prev, const vcomplex& input) ABI_SSE3
         {
-            return utils::vcomplex<vf>{
+            return vcomplex{
                 _mm_add_ps(_mm_sub_ps(_mm_mul_ps(prev.real, prev.real), _mm_mul_ps(prev.imag, prev.imag)), input.real),
                 _mm_add_ps(_mm_mul_ps(_mm_set1_ps(2), _mm_mul_ps(prev.real, prev.imag)), input.imag)
             };
@@ -85,21 +91,21 @@ utils::Buffer<int32_t> fractals::mandelbrot(const utils::Viewport& viewport, flo
 utils::Buffer<int32_t> fractals::burning_ship(const utils::Viewport& viewport, float resolution, int32_t iterations)
 {
     return loop(viewport, resolution, iterations,
-        [](const utils::vcomplex<vf>& input) ABI_SSE3
+        [](const vcomplex& input) ABI_SSE3
         {
-            return utils::vcomplex<vf>{
+            return vcomplex{
                 _mm_set1_ps(0.0f),
                 _mm_set1_ps(0.0f)
             };
         },
-        [](const utils::vcomplex<vf>& prev, const utils::vcomplex<vf>& input) ABI_SSE3
+        [](const vcomplex& prev, const vcomplex& input) ABI_SSE3
         {
-            utils::vcomplex<vf> prev_abs{
+            vcomplex prev_abs{
                 _mm_and_ps(prev.real, _mm_castsi128_ps(_mm_set1_epi32(0x7fffffff))),
                 _mm_and_ps(prev.imag, _mm_castsi128_ps(_mm_set1_epi32(0x7fffffff)))
             };
 
-            return utils::vcomplex<vf>{
+            return vcomplex{
                 _mm_add_ps(_mm_sub_ps(_mm_mul_ps(prev_abs.real, prev_abs.real), _mm_mul_ps(prev_abs.imag, prev_abs.imag)), input.real),
                 _mm_add_ps(_mm_mul_ps(_mm_set1_ps(2), _mm_mul_ps(prev_abs.real, prev_abs.imag)), input.imag)
             };
@@ -110,13 +116,13 @@ utils::Buffer<int32_t> fractals::burning_ship(const utils::Viewport& viewport, f
 utils::Buffer<int32_t> fractals::julia_set(const std::complex<float>& c, const utils::Viewport& viewport, float resolution, int32_t iterations)
 {
     return loop(viewport, resolution, iterations,
-        [](const utils::vcomplex<vf>& input) ABI_SSE3
+        [](const vcomplex& input) ABI_SSE3
         {
             return input;
         },
-        [c](const utils::vcomplex<vf>& prev, const utils::vcomplex<vf>&) ABI_SSE3
+        [c](const vcomplex& prev, const vcomplex&) ABI_SSE3
         {
-            return utils::vcomplex<vf>{
+            return vcomplex{
                 _mm_add_ps(_mm_sub_ps(_mm_mul_ps(prev.real, prev.real), _mm_mul_ps(prev.imag, prev.imag)), _mm_set1_ps(c.real())),
                 _mm_add_ps(_mm_mul_ps(_mm_set1_ps(2), _mm_mul_ps(prev.real, prev.imag)), _mm_set1_ps(c.imag()))
             };
