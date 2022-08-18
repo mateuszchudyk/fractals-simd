@@ -12,11 +12,18 @@ Library containing following set of fractals implemented using SIMD:
 
 ## Renders
 
-**Mandelbrot**
+**Mandelbrot** (iteration limit = 50)
+
 ![](images/mandelbrot.png)
 
-**Burning ship**
+**Burning ship** (iteration limit = 50)
+
 ![](images/burning-ship.png)
 
-**Julia set, c = -0.1 + 0.65i**
+**Julia set, c = -0.1 + 0.65i** (iteration limit = 50)
+
 ![](images/julia-set.png)
+
+**Julia set, c = -0.1 + 0.65i** (iteration limit = 10000)
+
+![](images/julia-set-10000.png)
