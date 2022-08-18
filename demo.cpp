@@ -35,7 +35,7 @@ int main(int argc, char** argv)
             2.5
         );
         auto result = fractals::burning_ship(viewport, viewport.width() / 800, 50);
-        fractals::utils::save_buffer_as_bmp(result, "burning-ship.bmp", fractals::utils::colormap::hot);
+        fractals::utils::save_buffer_as_bmp(result, "burning-ship.bmp", fractals::utils::colormap::hot, fractals::utils::transforms::vertical_flip);
     }
 
     // Julia set

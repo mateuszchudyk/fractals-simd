@@ -73,9 +73,9 @@ Buffer<int32_t> julia_set(const std::complex<float>& c, const Viewport& viewport
 
 namespace utils {
 
-namespace colormap {
-
 using Colormap = int32_t(*)(unsigned char value);
+
+namespace colormap {
 
 int32_t gray(unsigned char value);
 int32_t red(unsigned char value);
@@ -86,7 +86,32 @@ int32_t hot(unsigned char value);
 }
 
 template <typename Type>
-void save_buffer_as_bmp(const Buffer<Type>& buffer, const std::string& filename, const colormap::Colormap& colormap = colormap::hot)
+using Transform = std::pair<int32_t, int32_t>(*)(const Buffer<Type>& buffer, int32_t, int32_t);
+
+namespace transforms {
+
+template <typename Type>
+std::pair<int32_t, int32_t> identity(const Buffer<Type>& buffer, int32_t x, int32_t y)
+{
+    return std::pair<int32_t, int32_t>(x, y);
+}
+
+template <typename Type>
+std::pair<int32_t, int32_t> horizontal_flip(const Buffer<Type>& buffer, int32_t x, int32_t y)
+{
+    return std::pair<int32_t, int32_t>(buffer.width() - x - 1, y);
+}
+
+template <typename Type>
+std::pair<int32_t, int32_t> vertical_flip(const Buffer<Type>& buffer, int32_t x, int32_t y)
+{
+    return std::pair<int32_t, int32_t>(x, buffer.height() - y - 1);
+}
+
+}
+
+template <typename Type>
+void save_buffer_as_bmp(const Buffer<Type>& buffer, const std::string& filename, const Colormap& colormap = colormap::hot, const Transform<Type>& transform = transforms::identity)
 {
     std::ofstream file(filename, std::ios::binary);
 
@@ -124,7 +149,8 @@ void save_buffer_as_bmp(const Buffer<Type>& buffer, const std::string& filename,
     {
         for (int x = 0; x < buffer.width(); ++x)
         {
-            int32_t value = (max_value > 0 ? colormap(std::round(255.0f * *buffer.ptr(x, y) / max_value)) : 0);
+            auto transformed_xy = transform(buffer, x, y);
+            int32_t value = (max_value > 0 ? colormap(std::round(255.0f * *buffer.ptr(transformed_xy.first, transformed_xy.second) / max_value)) : 0);
             file.write(reinterpret_cast<char*>(&value), 4);
         }
     }
