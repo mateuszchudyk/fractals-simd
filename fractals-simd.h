@@ -8,8 +8,6 @@
 
 namespace fractals {
 
-namespace utils {
-
 class Viewport
 {
 public:
@@ -67,11 +65,9 @@ private:
     Type *_memory;
 };
 
-}
-
-utils::Buffer<int32_t> mandelbrot(const utils::Viewport& viewport, float resolution, int32_t iterations);
-utils::Buffer<int32_t> burning_ship(const utils::Viewport& viewport, float resolution, int32_t iterations);
-utils::Buffer<int32_t> julia_set(const std::complex<float>& c, const utils::Viewport& viewport, float resolution, int32_t iterations);
+Buffer<int32_t> mandelbrot(const Viewport& viewport, float resolution, int32_t iterations);
+Buffer<int32_t> burning_ship(const Viewport& viewport, float resolution, int32_t iterations);
+Buffer<int32_t> julia_set(const std::complex<float>& c, const Viewport& viewport, float resolution, int32_t iterations);
 
 }
 

@@ -4,7 +4,7 @@
 
 int main(int argc, char** argv)
 {
-    const fractals::utils::Viewport viewport(-2.5, 1.5, 0.5, -1.5);
+    const fractals::Viewport viewport(-2.5, 1.5, 0.5, -1.5);
     const int32_t iteration_max = 50;
 
     auto result = fractals::mandelbrot(viewport, 0.003, iteration_max);

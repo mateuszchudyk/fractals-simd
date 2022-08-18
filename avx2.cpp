@@ -17,7 +17,7 @@ struct vcomplex
 };
 
 template <typename Init, typename Kernel>
-static ABI_AVX2 utils::Buffer<int32_t> loop(const utils::Viewport& viewport,
+static ABI_AVX2 Buffer<int32_t> loop(const Viewport& viewport,
                                             float resolution,
                                             int32_t iterations,
                                             Init init,
@@ -25,7 +25,7 @@ static ABI_AVX2 utils::Buffer<int32_t> loop(const utils::Viewport& viewport,
 {
     const vf epsilon = _mm256_set1_ps(4.0f);
 
-    auto result_buffer = utils::Buffer<int32_t>(
+    auto result_buffer = Buffer<int32_t>(
         std::round(viewport.width() / resolution + 1),
         std::round(viewport.height() / resolution + 1),
         sizeof(vi) / sizeof(int32_t));
@@ -72,7 +72,7 @@ static ABI_AVX2 utils::Buffer<int32_t> loop(const utils::Viewport& viewport,
     return result_buffer;
 };
 
-utils::Buffer<int32_t> fractals::mandelbrot(const utils::Viewport& viewport, float resolution, int32_t iterations)
+Buffer<int32_t> fractals::mandelbrot(const Viewport& viewport, float resolution, int32_t iterations)
 {
     return loop(viewport, resolution, iterations,
         [](const vcomplex& input) ABI_AVX2
@@ -92,7 +92,7 @@ utils::Buffer<int32_t> fractals::mandelbrot(const utils::Viewport& viewport, flo
     );
 }
 
-utils::Buffer<int32_t> fractals::burning_ship(const utils::Viewport& viewport, float resolution, int32_t iterations)
+Buffer<int32_t> fractals::burning_ship(const Viewport& viewport, float resolution, int32_t iterations)
 {
     return loop(viewport, resolution, iterations,
         [](const vcomplex& input) ABI_AVX2
@@ -117,7 +117,7 @@ utils::Buffer<int32_t> fractals::burning_ship(const utils::Viewport& viewport, f
     );
 }
 
-utils::Buffer<int32_t> fractals::julia_set(const std::complex<float>& c, const utils::Viewport& viewport, float resolution, int32_t iterations)
+Buffer<int32_t> fractals::julia_set(const std::complex<float>& c, const Viewport& viewport, float resolution, int32_t iterations)
 {
     return loop(viewport, resolution, iterations,
         [](const vcomplex& input) ABI_AVX2
