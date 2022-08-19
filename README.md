@@ -24,19 +24,19 @@ Red, green, blue, gray, hot, jet:
 
 ## Renders
 
-**Mandelbrot** (iteration limit = 50)
+**Mandelbrot** (50 iterations)
 
 ![](images/mandelbrot.png)
 
-**Burning ship** (iteration limit = 50)
+**Burning ship** (50 iterations)
 
 ![](images/burning-ship.png)
 
-**Julia set, c = -0.1 + 0.65i** (iteration limit = 50)
+**Julia set, c = -0.1 + 0.65i** (50 iterations)
 
 ![](images/julia-set.png)
 
-**Julia set, c = -0.1 + 0.65i** (iteration limit = 10000)
+**Julia set, c = -0.1 + 0.65i** (10000 iterations)
 
 ![](images/julia-set-10000.png)
 
