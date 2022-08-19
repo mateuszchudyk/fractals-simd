@@ -33,6 +33,47 @@ uint32_t hot(unsigned char value)
     return red << 16 | green << 8 | blue;
 }
 
+uint32_t jet(unsigned char value)
+{
+    float red, green, blue;
+
+    // red
+    if (value < 96)
+        red = 0;
+    else if (value < 160)
+        red = (value - 96) / 64.f;
+    else if (value < 224)
+        red = 1;
+    else
+        red = 1 - (value - 224) / 64;
+
+    // green
+    if (value < 32)
+        green = 0;
+    else if (value < 96)
+        green = (value - 32) / 64.f;
+    else if (value < 160)
+        green = 1;
+    else if (value < 224)
+        green = 1 - (value - 160) / 64.f;
+    else
+        green = 0;
+
+    // blue
+    if (value < 32)
+        blue = 0.5f + value / 64.f;
+    else if (value < 96)
+        blue = 1;
+    else if (value < 160)
+        blue = 1 - (value - 96) / 64.f;
+    else
+        blue = 0;
+
+    return uint32_t(std::round(red * 255)) << 16
+         | uint32_t(std::round(green * 255)) << 8
+         | uint32_t(std::round(blue * 255));
+}
+
 }
 
 namespace transforms {

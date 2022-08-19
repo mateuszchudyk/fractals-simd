@@ -95,6 +95,7 @@ uint32_t red(unsigned char value);
 uint32_t green(unsigned char value);
 uint32_t blue(unsigned char value);
 uint32_t hot(unsigned char value);
+uint32_t jet(unsigned char value);
 
 }
 
