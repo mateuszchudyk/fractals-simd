@@ -58,7 +58,7 @@ void save_buffer_as_bmp(const Buffer& buffer, const std::string& filename, const
 {
     std::ofstream file(filename, std::ios::binary);
 
-    int filesize = (14 + 40) + 4 * buffer.width() * buffer.height();
+    uint32_t filesize = (14 + 40) + 4 * buffer.width() * buffer.height();
 
     uint8_t header[14] = {0};
     header[0] = 'B';
@@ -79,20 +79,20 @@ void save_buffer_as_bmp(const Buffer& buffer, const std::string& filename, const
 
     // Save data
     uint32_t max_value = 0;
-    for (int y = 0; y < buffer.height(); ++y)
+    for (uint32_t y = 0; y < buffer.height(); ++y)
     {
-        for (int x = 0; x < buffer.width(); ++x)
+        for (uint32_t x = 0; x < buffer.width(); ++x)
         {
             max_value = std::max(max_value, *buffer.ptr(x, y));
         }
     }
 
     auto zero = char(0);
-    for (int y = buffer.height() - 1; y >= 0; --y)
+    for (uint32_t y = 0; y < buffer.height(); ++y)
     {
-        for (int x = 0; x < buffer.width(); ++x)
+        for (uint32_t x = 0; x < buffer.width(); ++x)
         {
-            auto transformed_xy = transform(buffer, {x, y});
+            auto transformed_xy = transform(buffer, {x, buffer.height() - 1 - y});
             uint32_t value = (max_value > 0 ? colormap(std::round(255.0f * *buffer.ptr(transformed_xy.x(), transformed_xy.y()) / max_value)) : 0);
             file.write(reinterpret_cast<char*>(&value), 4);
         }

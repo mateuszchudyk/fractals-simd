@@ -29,12 +29,12 @@ static ABI_AVX2 void loop(Buffer& buffer,
 
     vcomplex input;
     vcomplex prev;
-    for (std::size_t y = 0; y < buffer.height(); ++y)
+    for (uint32_t y = 0; y < buffer.height(); ++y)
     {
         auto* result_ptr = buffer.line<vi>(y);
 
         input.imag = _mm256_set1_ps(viewport.top() - y * dy);
-        for (std::size_t x = 0; x < buffer.width(); x += sizeof(vi) / sizeof(uint32_t))
+        for (uint32_t x = 0; x < buffer.width(); x += sizeof(vi) / sizeof(uint32_t))
         {
             input.real = _mm256_set_ps(
                 viewport.left() + (x + 7) * dx,

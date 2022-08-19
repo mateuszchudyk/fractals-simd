@@ -47,7 +47,7 @@ private:
 class Buffer
 {
 public:
-    Buffer(std::size_t width, std::size_t height, std::size_t alignment = 64) : _width(width), _height(height), _alignment(alignment)
+    Buffer(uint32_t width, uint32_t height, uint32_t alignment = 64) : _width(width), _height(height), _alignment(alignment)
     {
         _stride = (width + alignment - 1) / alignment * alignment;
         _memory = static_cast<uint32_t*>(std::aligned_alloc(_alignment * sizeof(uint32_t), _stride * sizeof(uint32_t) * _height));
@@ -58,25 +58,25 @@ public:
         std::free(_memory);
     }
 
-    std::size_t width() const { return _width; }
-    std::size_t stride() const { return _stride; }
-    std::size_t height() const { return _height; }
-    std::size_t alignment() const { return _alignment; }
+    uint32_t width() const { return _width; }
+    uint32_t stride() const { return _stride; }
+    uint32_t height() const { return _height; }
+    uint32_t alignment() const { return _alignment; }
 
-    template <typename T = uint32_t> const T* ptr(std::size_t x, std::size_t y) const { return reinterpret_cast<const T*>(_memory + y * _stride + x); }
-    template <typename T = uint32_t> T* ptr(std::size_t x, std::size_t y) { return reinterpret_cast<T*>(_memory + y * _stride + x); }
-    template <typename T = uint32_t> const T* line(std::size_t n) const { return ptr<T>(0, n); }
-    template <typename T = uint32_t> T* line(std::size_t n) { return ptr<T>(0, n); }
+    template <typename T = uint32_t> const T* ptr(uint32_t x, uint32_t y) const { return reinterpret_cast<const T*>(_memory + y * _stride + x); }
+    template <typename T = uint32_t> T* ptr(uint32_t x, uint32_t y) { return reinterpret_cast<T*>(_memory + y * _stride + x); }
+    template <typename T = uint32_t> const T* line(uint32_t n) const { return ptr<T>(0, n); }
+    template <typename T = uint32_t> T* line(uint32_t n) { return ptr<T>(0, n); }
     template <typename T = uint32_t> const T* begin() const { return ptr<T>(0, 0); }
     template <typename T = uint32_t> T* begin() { return ptr<T>(0, 0); }
     template <typename T = uint32_t> const T* end() const { return ptr<T>(_width, _height - 1); }
     template <typename T = uint32_t> T* end() { return ptr<T>(_width, _height - 1); }
 
 private:
-    std::size_t _width;
-    std::size_t _stride;
-    std::size_t _height;
-    std::size_t _alignment;
+    uint32_t _width;
+    uint32_t _stride;
+    uint32_t _height;
+    uint32_t _alignment;
     uint32_t *_memory;
 };
 
