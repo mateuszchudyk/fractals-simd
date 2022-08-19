@@ -17,7 +17,7 @@ struct vcomplex
 };
 
 template <typename Init, typename Kernel>
-static ABI_SSE3 Buffer<int32_t> loop(const Viewport& viewport,
+static ABI_SSE3 Buffer loop(const Viewport& viewport,
                                             float resolution,
                                             int32_t iterations,
                                             Init init,
@@ -25,7 +25,7 @@ static ABI_SSE3 Buffer<int32_t> loop(const Viewport& viewport,
 {
     const vf epsilon = _mm_set1_ps(4.0f);
 
-    auto result_buffer = Buffer<int32_t>(
+    auto result_buffer = Buffer(
         std::round(viewport.width() / resolution + 1),
         std::round(viewport.height() / resolution + 1),
         sizeof(vi) / sizeof(int32_t));
@@ -68,7 +68,7 @@ static ABI_SSE3 Buffer<int32_t> loop(const Viewport& viewport,
     return result_buffer;
 };
 
-Buffer<int32_t> fractals::mandelbrot(const Viewport& viewport, float resolution, int32_t iterations)
+Buffer fractals::mandelbrot(const Viewport& viewport, float resolution, int32_t iterations)
 {
     return loop(viewport, resolution, iterations,
         [](const vcomplex& input) ABI_SSE3
@@ -88,7 +88,7 @@ Buffer<int32_t> fractals::mandelbrot(const Viewport& viewport, float resolution,
     );
 }
 
-Buffer<int32_t> fractals::burning_ship(const Viewport& viewport, float resolution, int32_t iterations)
+Buffer fractals::burning_ship(const Viewport& viewport, float resolution, int32_t iterations)
 {
     return loop(viewport, resolution, iterations,
         [](const vcomplex& input) ABI_SSE3
@@ -113,7 +113,7 @@ Buffer<int32_t> fractals::burning_ship(const Viewport& viewport, float resolutio
     );
 }
 
-Buffer<int32_t> fractals::julia_set(const std::complex<float>& c, const Viewport& viewport, float resolution, int32_t iterations)
+Buffer fractals::julia_set(const std::complex<float>& c, const Viewport& viewport, float resolution, int32_t iterations)
 {
     return loop(viewport, resolution, iterations,
         [](const vcomplex& input) ABI_SSE3
