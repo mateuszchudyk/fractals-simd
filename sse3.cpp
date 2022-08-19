@@ -17,33 +17,30 @@ struct vcomplex
 };
 
 template <typename Init, typename Kernel>
-static ABI_SSE3 Buffer loop(const Viewport& viewport,
-                                            float resolution,
-                                            uint32_t iterations,
-                                            Init init,
-                                            Kernel kernel)
+static ABI_SSE3 void loop(Buffer& buffer,
+                          const Viewport& viewport,
+                          uint32_t iterations,
+                          Init init,
+                          Kernel kernel)
 {
     const vf epsilon = _mm_set1_ps(4.0f);
-
-    auto result_buffer = Buffer(
-        std::round(viewport.width() / resolution + 1),
-        std::round(viewport.height() / resolution + 1),
-        sizeof(vi) / sizeof(uint32_t));
+    const auto dx = float(viewport.width()) / buffer.width();
+    const auto dy = float(viewport.height()) / buffer.height();
 
     vcomplex input;
     vcomplex prev;
-    for (std::size_t y = 0; y < result_buffer.height(); ++y)
+    for (std::size_t y = 0; y < buffer.height(); ++y)
     {
-        auto* result_ptr = result_buffer.line<vi>(y);
+        auto* result_ptr = buffer.line<vi>(y);
 
-        input.imag = _mm_set1_ps(viewport.top() - y * resolution);
-        for (std::size_t x = 0; x < result_buffer.width(); x += sizeof(vi) / sizeof(uint32_t))
+        input.imag = _mm_set1_ps(viewport.top() - y * dy);
+        for (std::size_t x = 0; x < buffer.width(); x += sizeof(vi) / sizeof(uint32_t))
         {
             input.real = _mm_set_ps(
-                viewport.left() + (x + 3) * resolution,
-                viewport.left() + (x + 2) * resolution,
-                viewport.left() + (x + 1) * resolution,
-                viewport.left() + (x + 0) * resolution
+                viewport.left() + (x + 3) * dx,
+                viewport.left() + (x + 2) * dx,
+                viewport.left() + (x + 1) * dx,
+                viewport.left() + (x + 0) * dx
             );
 
             auto result = _mm_set1_epi32(iterations);
@@ -64,13 +61,11 @@ static ABI_SSE3 Buffer loop(const Viewport& viewport,
             *result_ptr++ = result;
         }
     }
-
-    return result_buffer;
 };
 
-Buffer fractals::mandelbrot(const Viewport& viewport, float resolution, uint32_t iterations)
+void fractals::mandelbrot(Buffer& buffer, const Viewport& viewport, uint32_t iterations)
 {
-    return loop(viewport, resolution, iterations,
+    loop(buffer, viewport, iterations,
         [](const vcomplex& input) ABI_SSE3
         {
             return vcomplex{
@@ -88,9 +83,9 @@ Buffer fractals::mandelbrot(const Viewport& viewport, float resolution, uint32_t
     );
 }
 
-Buffer fractals::burning_ship(const Viewport& viewport, float resolution, uint32_t iterations)
+void fractals::burning_ship(Buffer& buffer, const Viewport& viewport, uint32_t iterations)
 {
-    return loop(viewport, resolution, iterations,
+    loop(buffer, viewport, iterations,
         [](const vcomplex& input) ABI_SSE3
         {
             return vcomplex{
@@ -113,9 +108,9 @@ Buffer fractals::burning_ship(const Viewport& viewport, float resolution, uint32
     );
 }
 
-Buffer fractals::julia_set(const std::complex<float>& c, const Viewport& viewport, float resolution, uint32_t iterations)
+void fractals::julia_set(Buffer& buffer, const Viewport& viewport, uint32_t iterations, const std::complex<float>& c)
 {
-    return loop(viewport, resolution, iterations,
+    loop(buffer, viewport, iterations,
         [](const vcomplex& input) ABI_SSE3
         {
             return input;

@@ -47,7 +47,7 @@ private:
 class Buffer
 {
 public:
-    Buffer(std::size_t width, std::size_t height, std::size_t alignment) : _width(width), _height(height), _alignment(alignment)
+    Buffer(std::size_t width, std::size_t height, std::size_t alignment = 64) : _width(width), _height(height), _alignment(alignment)
     {
         _stride = (width + alignment - 1) / alignment * alignment;
         _memory = static_cast<uint32_t*>(std::aligned_alloc(_alignment * sizeof(uint32_t), _stride * sizeof(uint32_t) * _height));
@@ -80,9 +80,9 @@ private:
     uint32_t *_memory;
 };
 
-Buffer mandelbrot(const Viewport& viewport, float resolution, uint32_t iterations);
-Buffer burning_ship(const Viewport& viewport, float resolution, uint32_t iterations);
-Buffer julia_set(const std::complex<float>& c, const Viewport& viewport, float resolution, uint32_t iterations);
+void mandelbrot(Buffer& buffer, const Viewport& viewport, uint32_t iterations);
+void burning_ship(Buffer& buffer, const Viewport& viewport, uint32_t iterations);
+void julia_set(Buffer& buffer, const Viewport& viewport, uint32_t iterations, const std::complex<float>& c);
 
 namespace utils {
 
