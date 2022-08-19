@@ -10,6 +10,20 @@
 
 namespace fractals {
 
+template <typename Type>
+class Point
+{
+public:
+    Point(Type x, Type y) : _x(x), _y(y) {}
+
+    Type x() const { return _x; }
+    Type y() const { return _y; }
+
+private:
+    Type _x;
+    Type _y;
+};
+
 class Viewport
 {
 public:
@@ -66,31 +80,31 @@ private:
     uint32_t *_memory;
 };
 
-Buffer mandelbrot(const Viewport& viewport, float resolution, int32_t iterations);
-Buffer burning_ship(const Viewport& viewport, float resolution, int32_t iterations);
-Buffer julia_set(const std::complex<float>& c, const Viewport& viewport, float resolution, int32_t iterations);
+Buffer mandelbrot(const Viewport& viewport, float resolution, uint32_t iterations);
+Buffer burning_ship(const Viewport& viewport, float resolution, uint32_t iterations);
+Buffer julia_set(const std::complex<float>& c, const Viewport& viewport, float resolution, uint32_t iterations);
 
 namespace utils {
 
-using Colormap = int32_t(*)(unsigned char value);
+using Colormap = uint32_t(*)(unsigned char value);
 
 namespace colormap {
 
-int32_t gray(unsigned char value);
-int32_t red(unsigned char value);
-int32_t green(unsigned char value);
-int32_t blue(unsigned char value);
-int32_t hot(unsigned char value);
+uint32_t gray(unsigned char value);
+uint32_t red(unsigned char value);
+uint32_t green(unsigned char value);
+uint32_t blue(unsigned char value);
+uint32_t hot(unsigned char value);
 
 }
 
-using Transform = std::pair<int32_t, int32_t>(*)(const Buffer& buffer, int32_t, int32_t);
+using Transform = Point<uint32_t>(*)(const Buffer& buffer, const Point<uint32_t>& xy);
 
 namespace transforms {
 
-std::pair<int32_t, int32_t> identity(const Buffer& buffer, int32_t x, int32_t y);
-std::pair<int32_t, int32_t> horizontal_flip(const Buffer& buffer, int32_t x, int32_t y);
-std::pair<int32_t, int32_t> vertical_flip(const Buffer& buffer, int32_t x, int32_t y);
+Point<uint32_t> identity(const Buffer& buffer, const Point<uint32_t>& xy);
+Point<uint32_t> horizontal_flip(const Buffer& buffer, const Point<uint32_t>& xy);
+Point<uint32_t> vertical_flip(const Buffer& buffer, const Point<uint32_t>& xy);
 
 }
 

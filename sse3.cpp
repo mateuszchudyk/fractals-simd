@@ -19,7 +19,7 @@ struct vcomplex
 template <typename Init, typename Kernel>
 static ABI_SSE3 Buffer loop(const Viewport& viewport,
                                             float resolution,
-                                            int32_t iterations,
+                                            uint32_t iterations,
                                             Init init,
                                             Kernel kernel)
 {
@@ -28,7 +28,7 @@ static ABI_SSE3 Buffer loop(const Viewport& viewport,
     auto result_buffer = Buffer(
         std::round(viewport.width() / resolution + 1),
         std::round(viewport.height() / resolution + 1),
-        sizeof(vi) / sizeof(int32_t));
+        sizeof(vi) / sizeof(uint32_t));
 
     vcomplex input;
     vcomplex prev;
@@ -37,7 +37,7 @@ static ABI_SSE3 Buffer loop(const Viewport& viewport,
         auto* result_ptr = result_buffer.line<vi>(y);
 
         input.imag = _mm_set1_ps(viewport.top() - y * resolution);
-        for (std::size_t x = 0; x < result_buffer.width(); x += sizeof(vi) / sizeof(int32_t))
+        for (std::size_t x = 0; x < result_buffer.width(); x += sizeof(vi) / sizeof(uint32_t))
         {
             input.real = _mm_set_ps(
                 viewport.left() + (x + 3) * resolution,
@@ -50,7 +50,7 @@ static ABI_SSE3 Buffer loop(const Viewport& viewport,
             auto result_mask = _mm_set1_epi32(0);
 
             prev = init(input);
-            for (int32_t iteration = 0; iteration < iterations; ++iteration)
+            for (uint32_t iteration = 0; iteration < iterations; ++iteration)
             {
                 prev = kernel(prev, input);
 
@@ -68,7 +68,7 @@ static ABI_SSE3 Buffer loop(const Viewport& viewport,
     return result_buffer;
 };
 
-Buffer fractals::mandelbrot(const Viewport& viewport, float resolution, int32_t iterations)
+Buffer fractals::mandelbrot(const Viewport& viewport, float resolution, uint32_t iterations)
 {
     return loop(viewport, resolution, iterations,
         [](const vcomplex& input) ABI_SSE3
@@ -88,7 +88,7 @@ Buffer fractals::mandelbrot(const Viewport& viewport, float resolution, int32_t 
     );
 }
 
-Buffer fractals::burning_ship(const Viewport& viewport, float resolution, int32_t iterations)
+Buffer fractals::burning_ship(const Viewport& viewport, float resolution, uint32_t iterations)
 {
     return loop(viewport, resolution, iterations,
         [](const vcomplex& input) ABI_SSE3
@@ -113,7 +113,7 @@ Buffer fractals::burning_ship(const Viewport& viewport, float resolution, int32_
     );
 }
 
-Buffer fractals::julia_set(const std::complex<float>& c, const Viewport& viewport, float resolution, int32_t iterations)
+Buffer fractals::julia_set(const std::complex<float>& c, const Viewport& viewport, float resolution, uint32_t iterations)
 {
     return loop(viewport, resolution, iterations,
         [](const vcomplex& input) ABI_SSE3
