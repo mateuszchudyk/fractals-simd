@@ -4,11 +4,23 @@
 
 Library containing following set of fractals implemented using SIMD:
 
-| Fractal      | SSE3 | AVX2 |
+|              | SSE3 | AVX2 |
 |--------------|------|------|
-| Mandelbrot   | X    | X    |
-| Burning ship | X    | X    |
-| Julia set    | X    | X    |
+| Mandelbrot   | +    | +    |
+| Burning ship | +    | +    |
+| Julia set    | +    | +    |
+
+**Supported colormaps:**
+
+Red, green, blue, gray, hot, jet:
+
+![](images/colormaps/red.png)
+![](images/colormaps/green.png)
+![](images/colormaps/blue.png)
+
+![](images/colormaps/gray.png)
+![](images/colormaps/hot.png)
+![](images/colormaps/jet.png)
 
 ## Renders
 
@@ -27,3 +39,4 @@ Library containing following set of fractals implemented using SIMD:
 **Julia set, c = -0.1 + 0.65i** (iteration limit = 10000)
 
 ![](images/julia-set-10000.png)
+

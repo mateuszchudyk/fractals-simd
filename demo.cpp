@@ -40,5 +40,18 @@ int main(int argc, char** argv)
         fractals::utils::save_buffer_as_bmp(result, "julia-set.bmp", fractals::utils::colormap::hot);
     }
 
+    // Colormaps
+    {
+        auto result = fractals::Buffer(200, 150);
+        auto viewport = createViewport(result, {-0.667, 0}, 55.f);
+        fractals::mandelbrot(result, viewport, 50);
+        fractals::utils::save_buffer_as_bmp(result, "mandelbrot_gray.bmp", fractals::utils::colormap::gray);
+        fractals::utils::save_buffer_as_bmp(result, "mandelbrot_red.bmp", fractals::utils::colormap::red);
+        fractals::utils::save_buffer_as_bmp(result, "mandelbrot_green.bmp", fractals::utils::colormap::green);
+        fractals::utils::save_buffer_as_bmp(result, "mandelbrot_blue.bmp", fractals::utils::colormap::blue);
+        fractals::utils::save_buffer_as_bmp(result, "mandelbrot_hot.bmp", fractals::utils::colormap::hot);
+        fractals::utils::save_buffer_as_bmp(result, "mandelbrot_jet.bmp", fractals::utils::colormap::jet);
+    }
+
     return 0;
 }
