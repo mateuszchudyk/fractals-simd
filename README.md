@@ -12,7 +12,7 @@ Library containing following set of fractals implemented using SIMD:
 
 **Built-in colormaps:**
 
-red, green, blue, yellow, cyan, magenta, gray, hot, jet
+red, green, blue, yellow, cyan, magenta, gray, hot, jet, cividis, twilight, turbo
 
 ![](images/colormaps/red.png)
 ![](images/colormaps/green.png)
@@ -25,6 +25,10 @@ red, green, blue, yellow, cyan, magenta, gray, hot, jet
 ![](images/colormaps/gray.png)
 ![](images/colormaps/hot.png)
 ![](images/colormaps/jet.png)
+
+![](images/colormaps/cividis.png)
+![](images/colormaps/twilight.png)
+![](images/colormaps/turbo.png)
 
 ## Renders
 
@@ -43,4 +47,3 @@ red, green, blue, yellow, cyan, magenta, gray, hot, jet
 **Julia set, c = -0.1 + 0.65i** (10000 iterations)
 
 ![](images/julia-set-10000.png)
-

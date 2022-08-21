@@ -112,6 +112,9 @@ uint32_t cyan(unsigned char value);
 uint32_t magenta(unsigned char value);
 uint32_t hot(unsigned char value);
 uint32_t jet(unsigned char value);
+uint32_t cividis(unsigned char value);
+uint32_t twilight(unsigned char value);
+uint32_t turbo(unsigned char value);
 
 }
 
