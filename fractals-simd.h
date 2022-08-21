@@ -103,6 +103,16 @@ using Colormap = uint32_t(*)(unsigned char value);
 
 namespace colormap {
 
+inline auto mix_rgb(float r, float g, float b)
+{
+    return [r, g, b](unsigned char value)
+    {
+        return uint32_t(std::round(value * r)) << 16
+             | uint32_t(std::round(value * g)) << 8
+             | uint32_t(std::round(value * b));
+    };
+}
+
 uint32_t gray(unsigned char value);
 uint32_t red(unsigned char value);
 uint32_t green(unsigned char value);

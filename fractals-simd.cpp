@@ -6,38 +6,37 @@ namespace colormap {
 
 uint32_t gray(unsigned char value)
 {
-    uint32_t v = value;
-    return v << 16 | v << 8 | v;
+    return mix_rgb(1, 1, 1)(value);
 }
 
 uint32_t red(unsigned char value)
 {
-    return uint32_t(value) << 16;
+    return mix_rgb(1, 0, 0)(value);
 }
 
 uint32_t green(unsigned char value)
 {
-    return uint32_t(value) << 8;
+    return mix_rgb(0, 1, 0)(value);
 }
 
 uint32_t blue(unsigned char value)
 {
-    return uint32_t(value);
+    return mix_rgb(0, 0, 1)(value);
 }
 
 uint32_t yellow(unsigned char value)
 {
-    return red(value) | green(value);
+    return mix_rgb(1, 1, 0)(value);
 }
 
 uint32_t cyan(unsigned char value)
 {
-    return green(value) | blue(value);
+    return mix_rgb(0, 1, 1)(value);
 }
 
 uint32_t magenta(unsigned char value)
 {
-    return red(value) | blue(value);
+    return mix_rgb(1, 0, 1)(value);
 }
 
 uint32_t hot(unsigned char value)
