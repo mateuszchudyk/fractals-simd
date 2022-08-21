@@ -80,9 +80,9 @@ private:
     uint32_t *_memory;
 };
 
-void mandelbrot(Buffer& buffer, const Viewport& viewport, uint32_t iterations);
-void burning_ship(Buffer& buffer, const Viewport& viewport, uint32_t iterations);
-void julia_set(Buffer& buffer, const Viewport& viewport, uint32_t iterations, const std::complex<float>& c);
+void mandelbrot(Buffer& result, const Viewport& viewport, uint32_t iterations);
+void burning_ship(Buffer& result, const Viewport& viewport, uint32_t iterations);
+void julia_set(Buffer& result, const Viewport& viewport, uint32_t iterations, const std::complex<float>& c);
 
 namespace utils {
 

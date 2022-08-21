@@ -17,24 +17,24 @@ struct vcomplex
 };
 
 template <typename Init, typename Kernel>
-static ABI_SSE3 void loop(Buffer& buffer,
+static ABI_SSE3 void loop(Buffer& result,
                           const Viewport& viewport,
                           uint32_t iterations,
                           Init init,
                           Kernel kernel)
 {
     const vf epsilon = _mm_set1_ps(4.0f);
-    const auto dx = float(viewport.width()) / buffer.width();
-    const auto dy = float(viewport.height()) / buffer.height();
+    const auto dx = float(viewport.width()) / result.width();
+    const auto dy = float(viewport.height()) / result.height();
 
     vcomplex input;
     vcomplex prev;
-    for (uint32_t y = 0; y < buffer.height(); ++y)
+    for (uint32_t y = 0; y < result.height(); ++y)
     {
-        auto* result_ptr = buffer.line<vi>(y);
+        auto* result_ptr = result.line<vi>(y);
 
         input.imag = _mm_set1_ps(viewport.top() - y * dy);
-        for (uint32_t x = 0; x < buffer.width(); x += sizeof(vi) / sizeof(uint32_t))
+        for (uint32_t x = 0; x < result.width(); x += sizeof(vi) / sizeof(uint32_t))
         {
             input.real = _mm_set_ps(
                 viewport.left() + (x + 3) * dx,
@@ -63,9 +63,9 @@ static ABI_SSE3 void loop(Buffer& buffer,
     }
 };
 
-void fractals::mandelbrot(Buffer& buffer, const Viewport& viewport, uint32_t iterations)
+void fractals::mandelbrot(Buffer& result, const Viewport& viewport, uint32_t iterations)
 {
-    loop(buffer, viewport, iterations,
+    loop(result, viewport, iterations,
         [](const vcomplex& input) ABI_SSE3
         {
             return vcomplex{
@@ -83,9 +83,9 @@ void fractals::mandelbrot(Buffer& buffer, const Viewport& viewport, uint32_t ite
     );
 }
 
-void fractals::burning_ship(Buffer& buffer, const Viewport& viewport, uint32_t iterations)
+void fractals::burning_ship(Buffer& result, const Viewport& viewport, uint32_t iterations)
 {
-    loop(buffer, viewport, iterations,
+    loop(result, viewport, iterations,
         [](const vcomplex& input) ABI_SSE3
         {
             return vcomplex{
@@ -108,9 +108,9 @@ void fractals::burning_ship(Buffer& buffer, const Viewport& viewport, uint32_t i
     );
 }
 
-void fractals::julia_set(Buffer& buffer, const Viewport& viewport, uint32_t iterations, const std::complex<float>& c)
+void fractals::julia_set(Buffer& result, const Viewport& viewport, uint32_t iterations, const std::complex<float>& c)
 {
-    loop(buffer, viewport, iterations,
+    loop(result, viewport, iterations,
         [](const vcomplex& input) ABI_SSE3
         {
             return input;
