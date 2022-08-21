@@ -14,21 +14,21 @@ Library containing following set of fractals implemented using SIMD:
 
 red, green, blue, yellow, cyan, magenta, gray, hot, jet, cividis, twilight, turbo
 
-![](images/colormaps/red.png)
-![](images/colormaps/green.png)
-![](images/colormaps/blue.png)
+![](images/colormaps/colormap_red.png)
+![](images/colormaps/colormap_green.png)
+![](images/colormaps/colormap_blue.png)
 
-![](images/colormaps/yellow.png)
-![](images/colormaps/cyan.png)
-![](images/colormaps/magenta.png)
+![](images/colormaps/colormap_yellow.png)
+![](images/colormaps/colormap_cyan.png)
+![](images/colormaps/colormap_magenta.png)
 
-![](images/colormaps/gray.png)
-![](images/colormaps/hot.png)
-![](images/colormaps/jet.png)
+![](images/colormaps/colormap_gray.png)
+![](images/colormaps/colormap_hot.png)
+![](images/colormaps/colormap_jet.png)
 
-![](images/colormaps/cividis.png)
-![](images/colormaps/twilight.png)
-![](images/colormaps/turbo.png)
+![](images/colormaps/colormap_cividis.png)
+![](images/colormaps/colormap_twilight.png)
+![](images/colormaps/colormap_turbo.png)
 
 ## Renders
 
@@ -44,6 +44,6 @@ red, green, blue, yellow, cyan, magenta, gray, hot, jet, cividis, twilight, turb
 
 ![](images/julia-set.png)
 
-**Julia set, c = -0.1 + 0.65i** (10000 iterations)
+**Julia set, c = -0.1 + 0.65i** (10 000 iterations)
 
 ![](images/julia-set-10000.png)
