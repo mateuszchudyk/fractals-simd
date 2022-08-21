@@ -24,6 +24,19 @@ private:
     Type _y;
 };
 
+class Resolution
+{
+public:
+    Resolution(uint32_t width, uint32_t height) : _width(width), _height(height) {}
+
+    uint32_t width() const { return _width; }
+    uint32_t height() const { return _height; }
+
+private:
+    uint32_t _width;
+    uint32_t _height;
+};
+
 class Viewport
 {
 public:
@@ -47,7 +60,7 @@ private:
 class Buffer
 {
 public:
-    Buffer(uint32_t width, uint32_t height, uint32_t alignment = 64) : _width(width), _height(height), _alignment(alignment)
+    Buffer(uint32_t width, uint32_t height, uint32_t alignment) : _width(width), _height(height), _alignment(alignment)
     {
         _stride = (width + alignment - 1) / alignment * alignment;
         _memory = static_cast<uint32_t*>(std::aligned_alloc(_alignment * sizeof(uint32_t), _stride * sizeof(uint32_t) * _height));
@@ -80,9 +93,9 @@ private:
     uint32_t *_memory;
 };
 
-void mandelbrot(Buffer& result, const Viewport& viewport, uint32_t iterations);
-void burning_ship(Buffer& result, const Viewport& viewport, uint32_t iterations);
-void julia_set(Buffer& result, const Viewport& viewport, uint32_t iterations, const std::complex<float>& c);
+Buffer mandelbrot(const Resolution& resolution, const Viewport& viewport, uint32_t iterations);
+Buffer burning_ship(const Resolution& resolution, const Viewport& viewport, uint32_t iterations);
+Buffer julia_set(const Resolution& resolution, const Viewport& viewport, uint32_t iterations, const std::complex<float>& c);
 
 namespace utils {
 
