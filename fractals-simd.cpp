@@ -25,6 +25,21 @@ uint32_t blue(unsigned char value)
     return uint32_t(value);
 }
 
+uint32_t yellow(unsigned char value)
+{
+    return red(value) | green(value);
+}
+
+uint32_t cyan(unsigned char value)
+{
+    return green(value) | blue(value);
+}
+
+uint32_t magenta(unsigned char value)
+{
+    return red(value) | blue(value);
+}
+
 uint32_t hot(unsigned char value)
 {
     uint32_t red = 255 * std::min(1.f, value / 95.f);

@@ -49,6 +49,9 @@ int main(int argc, char** argv)
         fractals::utils::save_buffer_as_bmp(result, "mandelbrot_red.bmp", fractals::utils::colormap::red);
         fractals::utils::save_buffer_as_bmp(result, "mandelbrot_green.bmp", fractals::utils::colormap::green);
         fractals::utils::save_buffer_as_bmp(result, "mandelbrot_blue.bmp", fractals::utils::colormap::blue);
+        fractals::utils::save_buffer_as_bmp(result, "mandelbrot_yellow.bmp", fractals::utils::colormap::yellow);
+        fractals::utils::save_buffer_as_bmp(result, "mandelbrot_cyan.bmp", fractals::utils::colormap::cyan);
+        fractals::utils::save_buffer_as_bmp(result, "mandelbrot_magenta.bmp", fractals::utils::colormap::magenta);
         fractals::utils::save_buffer_as_bmp(result, "mandelbrot_hot.bmp", fractals::utils::colormap::hot);
         fractals::utils::save_buffer_as_bmp(result, "mandelbrot_jet.bmp", fractals::utils::colormap::jet);
     }

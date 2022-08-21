@@ -10,13 +10,17 @@ Library containing following set of fractals implemented using SIMD:
 | Burning ship | +    | +    |
 | Julia set    | +    | +    |
 
-**Supported colormaps:**
+**Built-in colormaps:**
 
-Red, green, blue, gray, hot, jet:
+red, green, blue, yellow, cyan, magenta, gray, hot, jet
 
 ![](images/colormaps/red.png)
 ![](images/colormaps/green.png)
 ![](images/colormaps/blue.png)
+
+![](images/colormaps/yellow.png)
+![](images/colormaps/cyan.png)
+![](images/colormaps/magenta.png)
 
 ![](images/colormaps/gray.png)
 ![](images/colormaps/hot.png)
