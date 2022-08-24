@@ -30,20 +30,20 @@ red, green, blue, yellow, cyan, magenta, gray, hot, jet, cividis, twilight, turb
 ![](images/colormaps/colormap_twilight.png)
 ![](images/colormaps/colormap_turbo.png)
 
-## Renders
+## Gallery
 
 **Mandelbrot** (50 iterations)
 
-![](images/mandelbrot.png)
+![](images/gallery/mandelbrot.png)
 
 **Burning ship** (50 iterations)
 
-![](images/burning-ship.png)
+![](images/gallery/burning-ship.png)
 
 **Julia set, c = -0.1 + 0.65i** (50 iterations)
 
-![](images/julia-set.png)
+![](images/gallery/julia-set.png)
 
 **Julia set, c = -0.1 + 0.65i** (10 000 iterations)
 
-![](images/julia-set-10000.png)
+![](images/gallery/julia-set-10000.png)
