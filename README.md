@@ -1,5 +1,9 @@
 # Fractals SIMD
 
+<p align="center">
+<img src="images/mandelbrot-iterations.gif"/>
+</p>
+
 ## Overview
 
 Library containing following set of fractals implemented using SIMD:
